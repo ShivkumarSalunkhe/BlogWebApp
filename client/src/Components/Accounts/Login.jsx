@@ -39,7 +39,13 @@ const SignupButton = styled(Button)`
     box-shadow: 5px 5px 5px gray;
     margin-bottom:20px;
 `
-
+const Error = styled(Typography)`
+    font-size:10px;
+    color:red;
+    line-height:0;
+    margin-top:10px;
+    font-weight:600;
+`
 const signupInitialValues = {
     name: '',
     username: '',
@@ -49,6 +55,7 @@ const signupInitialValues = {
 function Login() {
     const [account, toggleAccount] = useState('login');
     const [signup, setSignup] = useState(signupInitialValues)
+    const [error, setError]= useState('');
 
     const toggleSignup = () => {
         account === 'signup' ? toggleAccount('login') : toggleAccount('signup')
@@ -60,6 +67,13 @@ function Login() {
 
     const signupUser= async ()=>{
       let response = await API.userSignup(signup);
+      if(response.isSuccess){
+        setError('')
+        setSignup(signupInitialValues);
+        toggleAccount('login')
+      }else{
+        setError('Something went wrong! Please try again')
+      }
     }
     return (
         <Component>
@@ -79,6 +93,7 @@ function Login() {
                             <TextField onChange={(e) => onInputChange(e)} label="Enter Name" name='name' variant="standard" />
                             <TextField onChange={(e) => onInputChange(e)} label="Enter Username" name='username' variant="standard" />
                             <TextField onChange={(e) => onInputChange(e)} label="Enter Password" name='password' variant="standard" />
+                            {error && <Error>{error}</Error>}
                             <SignupButton onClick={()=>signupUser()}>Signup</SignupButton>
                             <Typography>OR</Typography>
                             <LoginButton variant="contained" onClick={() => toggleSignup()}>Already have an account</LoginButton>
