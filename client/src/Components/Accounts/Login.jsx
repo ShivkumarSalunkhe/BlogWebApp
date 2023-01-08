@@ -1,4 +1,4 @@
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 import { TextField, Box, Button, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 
@@ -7,7 +7,6 @@ const Component = styled(Box)`
     width: 400px;
     margin:auto;
     box-shadow: 7px 7px 7px 5px gray;
-
     `
 const Image = styled(`img`)({
     width: 100,
@@ -15,7 +14,6 @@ const Image = styled(`img`)({
     display: 'flex',
     paddingTop: '50px'
 })
-
 
 const Wrapper = styled(Box)`
     padding:10px 35px;
@@ -40,18 +38,24 @@ const SignupButton = styled(Button)`
     background:#f2f2f2;
     box-shadow: 5px 5px 5px gray;
     margin-bottom:20px;
-
 `
+
+const signupInitialValues = {
+    name: '',
+    username: '',
+    password: ''
+}
 
 function Login() {
     const [account, toggleAccount] = useState('login');
+    const [signup, setSignup] = useState(signupInitialValues)
 
-    const toggleSignup=()=>{
+    const toggleSignup = () => {
         account === 'signup' ? toggleAccount('login') : toggleAccount('signup')
     }
 
-    const onInputChange=(e)=>{
-        console.log(e.target.value);
+    const onInputChange = (e) => {
+        setSignup({ ...signup, [e.target.name]: e.target.value })
     }
     return (
         <Component>
@@ -64,16 +68,16 @@ function Login() {
                             <TextField label="Enter Password" variant="standard" />
                             <LoginButton variant="contained">Login</LoginButton>
                             <Typography>OR</Typography>
-                            <SignupButton onClick={()=>toggleSignup()} variant="text">Create an account</SignupButton>
-                        </Wrapper> 
-                    :
+                            <SignupButton onClick={() => toggleSignup()} variant="text">Create an account</SignupButton>
+                        </Wrapper>
+                        :
                         <Wrapper>
-                            <TextField onChange={(e)=>onInputChange(e)} label="Enter Name" variant="standard" />
-                            <TextField onChange={(e)=>onInputChange(e)} label="Enter Username" variant="standard" />
-                            <TextField onChange={(e)=>onInputChange(e)} label="Enter Password" variant="standard" />
+                            <TextField onChange={(e) => onInputChange(e)} label="Enter Name" name='name' variant="standard" />
+                            <TextField onChange={(e) => onInputChange(e)} label="Enter Username" name='username' variant="standard" />
+                            <TextField onChange={(e) => onInputChange(e)} label="Enter Password" name='password' variant="standard" />
                             <SignupButton>Signup</SignupButton>
                             <Typography>OR</Typography>
-                            <LoginButton variant="contained" onClick={()=>toggleSignup()}>Already have an account</LoginButton>
+                            <LoginButton variant="contained" onClick={() => toggleSignup()}>Already have an account</LoginButton>
                         </Wrapper>
                 }
             </Box>
