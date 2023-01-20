@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { TextField, Box, Button, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import {API} from '../../service/api.js'
+import { DataContext } from '../../Context/DataProvider.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const Component = styled(Box)`
     width: 400px;
@@ -51,12 +53,19 @@ const signupInitialValues = {
     username: '',
     password: ''
 }
+const loginInitialValues={
+    username:'',
+    password:''
+}
 
 function Login() {
     const [account, toggleAccount] = useState('login');
     const [signup, setSignup] = useState(signupInitialValues)
+    const [login, setLogin] = useState(loginInitialValues)
     const [error, setError]= useState('');
 
+    const {setAccount} = useContext(DataContext)
+    const navigate=useNavigate()
     const toggleSignup = () => {
         account === 'signup' ? toggleAccount('login') : toggleAccount('signup')
     }
@@ -70,11 +79,33 @@ function Login() {
       if(response.isSuccess){
         setError('')
         setSignup(signupInitialValues);
+        console.log(signup)
         toggleAccount('login')
       }else{
         setError('Something went wrong! Please try again')
       }
     }
+
+    const onValueChange=(e)=>{
+        setLogin({...login, [e.target.name]: e.target.value})
+
+    }
+
+    const loginUser = async ()=>{
+        let response = await API.userLogin(login);
+        if(response.isSuccess){
+            setError('');
+            sessionStorage.setItem('accessToken', `Bearer${response.data.accessToken}`)
+            sessionStorage.setItem('refreshToken', `Bearer${response.data.refreshToken}`)
+            setAccount({username: response.data.username, name: response.data.name})
+            console.log(login)
+            navigate('/')
+
+        }else{
+            setError('Something went wrong! Please try again later')
+        }
+    }
+
     return (
         <Component>
             <Box>
@@ -82,9 +113,9 @@ function Login() {
                 {
                     account === 'login' ?
                         <Wrapper>
-                            <TextField label="Enter Username" variant="standard" />
-                            <TextField label="Enter Password" variant="standard" />
-                            <LoginButton variant="contained">Login</LoginButton>
+                            <TextField label="Enter Username" value={login.username} onChange={(e)=> onValueChange(e)} name='username' variant="standard" />
+                            <TextField label="Enter Password" value={login.password} onChange={(e)=> onValueChange(e)} name='password' type='password' variant="standard" />
+                            <LoginButton variant="contained" onClick={()=>loginUser()}>Login</LoginButton>
                             <Typography>OR</Typography>
                             <SignupButton onClick={() => toggleSignup()} variant="text">Create an account</SignupButton>
                         </Wrapper>

@@ -1,16 +1,24 @@
-
 import './App.css';
 import Login from './Components/Accounts/Login';
-import Signup from './Components/Accounts/Signup';
-
+import Home from './Components/Home/Home';
+import DataProvider from './Context/DataProvider';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Header from './Components/Header/Header';
 
 function App() {
   return (
-    <div className="App" >
-      <Login/>
-      <Signup/>
-      hello
-    </div>
+    <DataProvider>
+      <BrowserRouter>
+      <Header/>
+        <div className="App" >
+          <Routes>
+            <Route path='/login' element={<Login />} />
+            <Route path='/' element={<Home />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </DataProvider>
+
   );
 }
 
