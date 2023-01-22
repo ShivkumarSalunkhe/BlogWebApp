@@ -15,24 +15,24 @@ conn.once('open', ()=>{
     gfs = grid(conn.db, mongoose.mongo);
     gfs.collection('fs');
 })
-export const uploadImage = (req, res) => {
-    if (!req.file) {
-        return res.status(404)
+export const uploadImage = (request, response) => {
+    if (!request.file) {
+        return response.status(404)
             .json({
                 msg: 'File Not Found'
             })
     }
-    const imageUrl = `${url}/file/${req.file.filename}`
-    return res.status(200).json(imageUrl)
+    const imageUrl = `${url}/file/${request.file.filename}`
+    return response.status(200).json(imageUrl)
 }
 
-export const getImage= async(req, res)=>{
+export const getImage= async(request, response)=>{
     try {
-        const file = await gfs.files.findOne({filename: req.params.filename})
+        const file = await gfs.files.findOne({filename: request.params.filename})
         const readStream = gridfsBucket.openDownloadStream(file._id);
-        readStream.pipe(res);
+        readStream.pipe(response);
     } catch (error) {
-        return res.status(500)
+        return response.status(500)
         .json({
             msg:error.message
         })
