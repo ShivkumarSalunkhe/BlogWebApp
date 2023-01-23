@@ -40,7 +40,7 @@ const initialPost ={
     picture:'',
     username:'',
     categories:'',
-    createDate:new Date()
+    createdDate:new Date()
 }
 const CreatePost = () => {
    
@@ -68,15 +68,22 @@ const CreatePost = () => {
         post.username = account.username
     }, [file])
 
-    const handleChange = (e) =>{
-        setPost({...post, [e.target.name]: e.target.value})
-    }
+   
 
     const savePost = async()=>{
+        console.log("hello");
+        console.log(post);
       let response = await API.createPost(post)
       if(response.isSuccess){
         navigate('/')
+        console.log(response);
+      }else{
+        console.log("rrorrr");
       }
+    }
+
+    const handleChange = (e) =>{
+        setPost({...post, [e.target.name]: e.target.value})
     }
 
     return (
@@ -94,7 +101,7 @@ const CreatePost = () => {
                 />
 
                 <InputTextFeild placeholder='Title' onChange={(e)=> handleChange(e)} name='title'/>
-                <Button variant='contained' onClick={savePost}>Publish</Button>
+                <Button variant='contained' onClick={()=>savePost()}>Publish</Button>
             </StyledFormControl>
             <TextArea
                 minRows={5}

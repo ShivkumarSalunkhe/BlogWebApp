@@ -6,6 +6,7 @@ import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom
 import Header from './Components/Header/Header';
 import { useState } from 'react';
 import CreatePost from './Components/Create/CreatePost';
+import { ToastContextProvider } from './Context/ToastContext';
 
 
 const PrivateRoute = ({ isAuthenticated, ...props }) => {
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <DataProvider>
+    <ToastContextProvider>
       <BrowserRouter>
         <div className="App" >
           <Routes>
@@ -39,7 +41,9 @@ function App() {
           </Routes>
         </div>
       </BrowserRouter>
+      </ToastContextProvider>
     </DataProvider>
+    
 
   );
 }

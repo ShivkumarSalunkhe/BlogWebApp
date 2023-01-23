@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { API } from '../../service/api.js'
 import { DataContext } from '../../Context/DataProvider.jsx';
 import { useNavigate } from 'react-router-dom';
+import ToastContext from '../../Context/ToastContext.jsx';
 
 const Component = styled(Box)`
     width: 400px;
@@ -64,6 +65,7 @@ function Login({ isUserAuthenticated }) {
     const [login, setLogin] = useState(loginInitialValues)
     const [error, setError] = useState('');
 
+    const {toast} = useContext(ToastContext)
     const { setAccount } = useContext(DataContext)
     const navigate = useNavigate()
     const toggleSignup = () => {
@@ -80,12 +82,14 @@ function Login({ isUserAuthenticated }) {
             setError('')
             setSignup(signupInitialValues);
             toggleAccount('login')
-            console.log(signup)
+            toast.success(response.data.msg)
         } else {
             setError('Something went wrong! Please try again')
             console.log("Error", error)
+            console.log(response)
         }
     }
+
 
     const onValueChange = (e) => {
         setLogin({ ...login, [e.target.name]: e.target.value })
@@ -94,17 +98,20 @@ function Login({ isUserAuthenticated }) {
 
     const loginUser = async () => {
         let response = await API.userLogin(login);
+        
         if (response.isSuccess) {
             setError('');
-            sessionStorage.setItem('accessToken', `Bearer${response.data.accessToken}`)
-            sessionStorage.setItem('refreshToken', `Bearer${response.data.refreshToken}`)
+            sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`)
+            sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`)
             setAccount({ username: response.data.username, name: response.data.name })
             navigate('/')
             isUserAuthenticated(true)
-            console.log(login)
+            toast.success(response.data.msg)
+
         } else {
             setError('Something went wrong! Please try again later')
             console.log("Error", error)
+            console.log(response)
         }
     }
 
