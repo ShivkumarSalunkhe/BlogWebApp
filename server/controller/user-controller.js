@@ -20,12 +20,14 @@ export const signupUser = async (request, response) => {
         await newUser.save();
         return response.status(200)
             .json({
-                msg: "Signup Successful"
+                msg: "Signup Successful",
+                newUser:newUser
             })
     } catch (error) {
         return response.status(500)
             .json({
-                msg: "Error While Signup User"
+                msg: "Error While Signup User",
+                newUser:newUser
             })
     }
 }
@@ -51,7 +53,8 @@ export const loginUser = async (request, response) => {
                     accessToken: accessToken,
                     refreshToken: refreshToken,
                     name: user.name,
-                    username: user.username
+                    username: user.username,
+                    msg:"Login Successfull"
                 })
         } else {
             return response.status(400)
