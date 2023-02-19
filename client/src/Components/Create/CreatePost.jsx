@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { DataContext } from '../../Context/DataProvider';
 import {API} from '../../service/api'
+import ToastContext from '../../Context/ToastContext';
 
 const Container = styled(Box)`
     margin: 50px 100px
@@ -44,10 +45,12 @@ const initialPost ={
 }
 const CreatePost = () => {
    
-    
+    const {toast} = useContext(ToastContext)
+
     const [post, setPost]=useState(initialPost);
     const [file, setFile]=useState('');
     const location = useLocation();
+
     const {account}= useContext(DataContext);
     const url = post.picture ? post.picture : 'https://images.unsplash.com/photo-1543128639-4cb7e6eeef1b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGFwdG9wJTIwc2V0dXB8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80'
     const navigate = useNavigate();
@@ -68,13 +71,12 @@ const CreatePost = () => {
         post.username = account.username
     }, [file])
 
-   
 
     const savePost = async()=>{
-        console.log("hello");
         console.log(post);
       let response = await API.createPost(post)
       if(response.isSuccess){
+        toast.success(response.data)
         navigate('/')
         console.log(response);
       }else{
