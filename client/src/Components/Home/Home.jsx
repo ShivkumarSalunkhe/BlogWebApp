@@ -1,7 +1,8 @@
-import React from 'react'
-import Banner from '../Banner/Banner'
-import Categories from './Categories'
-import { Grid } from '@mui/material'
+import React from "react";
+import Banner from "../Banner/Banner";
+import Categories from "./Categories";
+import { Grid } from "@mui/material";
+import Posts from "./Post/Posts";
 function Home() {
   return (
     <>
@@ -11,14 +12,11 @@ function Home() {
           <Categories />
         </Grid>
         <Grid container item lg={10} sm={10} xs={12}>
-Posts
+          <Posts />
         </Grid>
       </Grid>
-
-
     </>
-
-  )
+  );
 }
 
-export default Home
+export default Home;
