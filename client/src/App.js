@@ -7,6 +7,7 @@ import Header from './Components/Header/Header';
 import { useState } from 'react';
 import CreatePost from './Components/Create/CreatePost';
 import { ToastContextProvider } from './Context/ToastContext';
+import DetailsView from './Components/Details/DetailsView';
 
 
 const PrivateRoute = ({ isAuthenticated, ...props }) => {
@@ -36,6 +37,10 @@ function App() {
             
             <Route path='/create' element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
               <Route path='/create' element={<CreatePost />} />
+            </Route>
+
+            <Route path='/details/:id' element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
+              <Route path='/details/:id' element={<DetailsView />} />
             </Route>
             
           </Routes>

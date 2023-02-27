@@ -1,6 +1,7 @@
+/* eslint-disable no-loop-func */
 import axios from 'axios';
 import { API_NOTIFICATION_MESSAGES, SERVICE_URLS } from '../constants/config.js';
-import { getAccessToken } from '../utils/common-utils.js';
+import { getAccessToken, getType } from '../utils/common-utils.js';
 
 const API_URL='http://localhost:8000';
 ///common api interceptors
@@ -14,6 +15,11 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     function (config){
+        if(config.TYPE.params){
+            config.params = config.TYPE.params;
+        }else if(config.TYPE.query){
+           config.url = config.url + '/' + config.TYPE.query;
+        }
         return config;
     },
     function(error){
@@ -86,6 +92,9 @@ for(const [key,value] of Object.entries(SERVICE_URLS)){
             headers:{
                 authorization: getAccessToken()
             },
+            // eslint-disable-next-line no-undef
+            TYPE: getType(value, body),
+
             onUploadProgress: function(processEvent){
                 if(showUploadProgress){
                     let percentageCompleted= Math.round((processEvent.loaded * 100)/processEvent.total)
