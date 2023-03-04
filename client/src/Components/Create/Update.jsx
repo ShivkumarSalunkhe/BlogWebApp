@@ -93,7 +93,6 @@ const Update = () => {
   }, [file]);
 
   const updateBlogPost = async () => {
-    console.log(post);
     let response = await API.updatePost(post);
     if (response.isSuccess) {
       toast.success(response.data);

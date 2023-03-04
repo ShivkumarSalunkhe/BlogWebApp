@@ -82,14 +82,11 @@ const CreatePost = () => {
   }, [file]);
 
   const savePost = async () => {
-    console.log(post);
     let response = await API.createPost(post);
     if (response.isSuccess) {
       toast.success(response.data);
       navigate("/");
-      console.log(response);
     } else {
-      console.log("rrorrr");
     }
   };
 

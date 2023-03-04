@@ -39,7 +39,6 @@ const Comments = ({ post }) => {
   const { toast } = useContext(ToastContext);
   const { account } = useContext(DataContext);
 
-  console.log(account);
 
   useEffect(() => {
     const getData = async () => {
@@ -49,7 +48,6 @@ const Comments = ({ post }) => {
           setComments(response.data);
         }
       } catch (error) {
-        console.log(error);
       }
     };
     getData();
