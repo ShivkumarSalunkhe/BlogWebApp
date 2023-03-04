@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 import { Typography, Box, styled } from "@mui/material";
-import { Delete } from "@mui/icons-material";
+import Delete from '../../../Assets/Delete.png'
 
 import { API } from "../../../service/api";
 import { DataContext } from "../../../Context/DataProvider";
@@ -29,9 +29,12 @@ const StyledDate = styled(Typography)`
   color: #878787;
 `;
 
-const DeleteIcon = styled(Delete)`
-  margin-left: auto;
-`;
+const DeleteIcon = styled('img')({
+  margin: "5px",
+  padding: "5px",
+  width:'20px',
+  marginLeft: "auto"
+})
 
 const Comment = ({ comment, setToggle }) => {
   const { account } = useContext(DataContext);
@@ -48,7 +51,7 @@ const Comment = ({ comment, setToggle }) => {
         <Name>{comment.name}</Name>
         <StyledDate>{new Date(comment.date).toDateString()}</StyledDate>
         {comment.name === account.username && (
-          <DeleteIcon onClick={() => removeComment()} />
+          <DeleteIcon src={Delete} alt='delete' onClick={() => removeComment()}/>
         )}
       </Container>
       <Typography>{comment.comments}</Typography>

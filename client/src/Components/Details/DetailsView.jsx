@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import { Box, Typography, styled } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { API } from "../../service/api";
 import { DataContext } from "../../Context/DataProvider";
 import Comments from "./Comments/Comments";
 import ToastContext from "../../Context/ToastContext";
+import Edit from '../../Assets/Edit.png';
+import Delete from '../../Assets/Delete.png'
 // components
 
 const Container = styled(Box)(({ theme }) => ({
@@ -21,19 +22,23 @@ const Image = styled("img")({
   objectFit: "cover",
 });
 
-const EditIcon = styled(Edit)`
-  margin: 5px;
-  padding: 5px;
-  border: 1px solid #878787;
-  border-radius: 10px;
-`;
+const EditIcon = styled('img')({
+  margin: "5px",
+  padding: "5px",
+  border: "1px solid #878787",
+  borderRadius: "10px",
+  width:'25px'
+})
 
-const DeleteIcon = styled(Delete)`
-  margin: 5px;
-  padding: 5px;
-  border: 1px solid #878787;
-  border-radius: 10px;
-`;
+const DeleteIcon = styled('img')({
+  margin: "5px",
+  padding: "5px",
+  border: "1px solid #878787",
+  borderRadius: "10px",
+  width:'25px'
+})
+
+
 
 const Heading = styled(Typography)`
   font-size: 38px;
@@ -84,9 +89,9 @@ const DetailView = () => {
         {account.username === post.username && (
           <>
             <Link to={`/update/${post._id}`}>
-              <EditIcon color="primary" />
+              <EditIcon src={Edit} alt='edit'/>
             </Link>
-            <DeleteIcon onClick={() => deleteBlog()} color="error" />
+            <DeleteIcon src={Delete} alt='delete' onClick={() => deleteBlog()}/>
           </>
         )}
       </Box>

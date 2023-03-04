@@ -18,7 +18,7 @@ const Image = styled("img")({
 });
 
 const StyledTextArea = styled(TextareaAutosize)`
-  height: 100px !important;
+  height: 40px !important;
   width: 100%;
   margin: 0 20px;
 `;
@@ -74,7 +74,7 @@ const Comments = ({ post }) => {
       <Container>
         <Image src={url} alt="dp" />
         <StyledTextArea
-          rowsMin={5}
+          rowsMin={3}
           placeholder="what's on your mind?"
           onChange={(e) => handleChange(e)}
           value={comment.comments}
@@ -86,7 +86,7 @@ const Comments = ({ post }) => {
           style={{ height: 40 }}
           onClick={(e) => addComment(e)}
         >
-          Post
+          Comment
         </Button>
       </Container>
       <Box>
