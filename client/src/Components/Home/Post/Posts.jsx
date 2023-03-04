@@ -16,6 +16,7 @@ const Posts = () => {
       if (response.isSuccess) {
         setPost(response.data);
       }
+     
     };
     fetchData();
   }, [category]);
