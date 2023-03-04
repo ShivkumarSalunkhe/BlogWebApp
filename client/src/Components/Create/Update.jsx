@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { AddCircle as Add } from "@mui/icons-material";
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { DataContext } from "../../Context/DataProvider";
 import { API } from "../../service/api";
 import ToastContext from "../../Context/ToastContext";
@@ -52,7 +52,7 @@ const initialPost = {
   categories: "",
   createdDate: new Date(),
 };
-const CreatePost = () => {
+const Update = () => {
   const { toast } = useContext(ToastContext);
 
   const [post, setPost] = useState(initialPost);
@@ -64,6 +64,17 @@ const CreatePost = () => {
     ? post.picture
     : "https://images.unsplash.com/photo-1543128639-4cb7e6eeef1b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGFwdG9wJTIwc2V0dXB8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80";
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let response = await API.getPostByID(id);
+      if (response.isSuccess) {
+        setPost(response.data);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const getImage = async () => {
@@ -81,15 +92,12 @@ const CreatePost = () => {
     post.username = account.username;
   }, [file]);
 
-  const savePost = async () => {
+  const updateBlogPost = async () => {
     console.log(post);
-    let response = await API.createPost(post);
+    let response = await API.updatePost(post);
     if (response.isSuccess) {
       toast.success(response.data);
-      navigate("/");
-      console.log(response);
-    } else {
-      console.log("rrorrr");
+      navigate(`/details/${id}`);
     }
   };
 
@@ -113,10 +121,11 @@ const CreatePost = () => {
 
         <InputTextFeild
           placeholder="Title"
+          value={post.title}
           onChange={(e) => handleChange(e)}
           name="title"
         />
-        <Button variant="contained" onClick={() => savePost()}>
+        <Button variant="contained" onClick={() => updateBlogPost()}>
           Publish
         </Button>
       </StyledFormControl>
@@ -125,9 +134,10 @@ const CreatePost = () => {
         placeholder="Tell Your Story.."
         onChange={(e) => handleChange(e)}
         name="description"
+        value={post.description}
       />
     </Container>
   );
 };
 
-export default CreatePost;
+export default Update;

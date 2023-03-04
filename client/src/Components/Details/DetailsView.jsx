@@ -1,27 +1,25 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Box, Typography } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { Box, Typography, styled } from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { API } from "../../service/api";
-import { styled } from "@mui/system";
-import { Edit, Delete } from "@mui/icons-material";
 import { DataContext } from "../../Context/DataProvider";
+import Comments from "./Comments/Comments";
+import ToastContext from "../../Context/ToastContext";
+// components
 
-const Container = styled(Box)`
-  margin: 50px 100px;
-`;
+const Container = styled(Box)(({ theme }) => ({
+  margin: "50px 100px",
+  [theme.breakpoints.down("md")]: {
+    margin: 0,
+  },
+}));
+
 const Image = styled("img")({
   width: "100%",
-  objectFit: "cover",
   height: "50vh",
+  objectFit: "cover",
 });
-
-const Heading = styled(Typography)`
-  text-align: center;
-  font-weight: 600;
-  font-size: 34px;
-  margin: 50px 0px 10px 0px;
-  word-break: break-word;
-`;
 
 const EditIcon = styled(Edit)`
   margin: 5px;
@@ -29,6 +27,7 @@ const EditIcon = styled(Edit)`
   border: 1px solid #878787;
   border-radius: 10px;
 `;
+
 const DeleteIcon = styled(Delete)`
   margin: 5px;
   padding: 5px;
@@ -36,65 +35,81 @@ const DeleteIcon = styled(Delete)`
   border-radius: 10px;
 `;
 
-const Author = styled(Box)`
-  margin: 20px 0px;
-  color: #878787;
-  display: flex;
-`;
-const Description = styled(Typography)`
-  word-break: break-word;
+const Heading = styled(Typography)`
+  font-size: 38px;
+  font-weight: 600;
+  text-align: center;
+  margin: 50px 0 10px 0;
 `;
 
-const DetailsView = () => {
-  const [post, setPost] = useState();
+const Author = styled(Box)(({ theme }) => ({
+  color: "#878787",
+  display: "flex",
+  margin: "20px 0",
+  [theme.breakpoints.down("sm")]: {
+    display: "block",
+  },
+}));
 
+const DetailView = () => {
+  const url =
+    "https://images.unsplash.com/photo-1543128639-4cb7e6eeef1b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGFwdG9wJTIwc2V0dXB8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80";
 
-  const url = post.picture
-    ? post.picture
-    : "https://www.motori.it/pUgU4TCDtCDODZpJGj4XW_9WaXM=/1024x674/smart/uploads/2017/03/017173.jpg";
-    
-    const { account } = useContext(DataContext);
+  const [post, setPost] = useState({});
+  const { account } = useContext(DataContext);
+  const { toast } = useContext(ToastContext);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-    const { id } = useParams();
   useEffect(() => {
     const fetchData = async () => {
-      const response = await API.getPostByID(id);
+      let response = await API.getPostByID(id);
       if (response.isSuccess) {
         setPost(response.data);
-        console.log(response.data);
       }
     };
     fetchData();
   }, []);
-  console.log(post);
+
+  const deleteBlog = async () => {
+    const response = await API.deletePost(post._id);
+    navigate("/");
+    toast.success(response.data);
+  };
 
   return (
     <Container>
-      <Image src={url} alt="sd" />
+      <Image src={post.picture || url} alt="post" />
       <Box style={{ float: "right" }}>
         {account.username === post.username && (
           <>
-            <EditIcon color="primary" />
-            <DeleteIcon color="error" />
+            <Link to={`/update/${post._id}`}>
+              <EditIcon color="primary" />
+            </Link>
+            <DeleteIcon onClick={() => deleteBlog()} color="error" />
           </>
         )}
       </Box>
-
       <Heading>{post.title}</Heading>
+
       <Author>
-        <Typography>
-          Author:{" "}
-          <Box component="span" style={{ fontWeight: 600 }}>
-            {post.username}
-          </Box>
+        <Link
+          to={`/?username=${post.username}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <Typography>
+            Author: <span style={{ fontWeight: 600 }}>{post.username}</span>
+          </Typography>
+        </Link>
+        <Typography style={{ marginLeft: "auto" }}>
+          {new Date(post.createdDate).toDateString()}
         </Typography>
-        <Typography style={{ marginLeft: "auto" }}>{new Date(post.createdDate).toDateString()}</Typography>
-        <Description >
-          {post.description}
-        </Description>
       </Author>
+
+      <Typography>{post.description}</Typography>
+      <Comments post={post} />
     </Container>
   );
 };
 
-export default DetailsView;
+export default DetailView;

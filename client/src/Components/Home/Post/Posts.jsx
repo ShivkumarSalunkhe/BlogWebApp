@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { API } from "../../../service/api";
 import { Box, Grid } from "@mui/material";
 import Post from "./Post";
-import {Link, useSearchParams} from 'react-router-dom'
+import { Link, useSearchParams } from "react-router-dom";
 
 const Posts = () => {
   const [posts, setPost] = useState();
 
-  const [serachParams] = useSearchParams()
-  const category = serachParams.get('category')
+  const [serachParams] = useSearchParams();
+  const category = serachParams.get("category");
 
   useEffect(() => {
     const fetchData = async () => {
-      let response = await API.getAllPosts({category: category || ''});
+      let response = await API.getAllPosts({ category: category || "" });
       if (response.isSuccess) {
         setPost(response.data);
       }
@@ -25,10 +25,12 @@ const Posts = () => {
       {posts && posts.length > 0 ? (
         posts.map((post) => (
           <Grid item lg={3} sm={4} xs={12}>
-          <Link to={`/details/${post._id}`} style={{textDecoration:'none', color:'inherit'}}>
-          <Post post={post} />
-          </Link>
-
+            <Link
+              to={`/details/${post._id}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <Post post={post} />
+            </Link>
           </Grid>
         ))
       ) : (
