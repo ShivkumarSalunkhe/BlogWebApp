@@ -1,7 +1,9 @@
-import React from "react";
+import React,{useContext} from "react";
 import { AppBar, Toolbar, styled } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import ToastContext from "../../Context/ToastContext.jsx";
+import { DataContext } from "../../Context/DataProvider";
 
 const Component = styled(AppBar)`
   background: white;
@@ -17,11 +19,13 @@ const Container = styled(Toolbar)`
 `;
 
 const Header = () => {
+  const { toast } = useContext(ToastContext);
+  const { account } = useContext(DataContext);
   const navigate = useNavigate();
   const logout = () => {
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");
-
+    toast.success(`Thank You..! See You Again..!    ${account.username}  👏`);
     navigate("/login");
   };
 

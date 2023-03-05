@@ -114,7 +114,7 @@ function Login({ isUserAuthenticated }) {
       });
       navigate("/");
       isUserAuthenticated(true);
-      toast.success(response.data.msg);
+      toast.success(`Hello..! ${login.username}👋`);
     } catch (error) {
       setError("Something went wrong! Please try again later");
       error.display

@@ -1,8 +1,9 @@
 import { Box, styled, Typography, Link } from "@mui/material";
 import { GitHub, Instagram, Email } from "@mui/icons-material";
+import about from '../../Assets/23-236943_us-wallpaper-for-website.jpg'
 
 const Banner = styled(Box)`
-  background-image: url(https://www.wallpapertip.com/wmimgs/23-236943_us-wallpaper-for-website.jpg);
+  background-image: url(${about});
   width: 100%;
   height: 50vh;
   background-position: left 0px bottom 0px;
@@ -26,7 +27,7 @@ const About = () => {
     <Box>
       <Banner />
       <Wrapper>
-        <Typography variant="h3">Shivkumar Salunkhe</Typography>
+        <Typography variant="h3">Shiv Salunkhe</Typography>
         <Text variant="h5">
           I'm a Software Engineer based in India. I've built websites, desktop
           applications and corporate software.

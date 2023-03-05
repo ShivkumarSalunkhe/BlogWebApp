@@ -1,11 +1,12 @@
 import React from "react";
 import { Box, Typography, styled } from "@mui/material";
+import './post.css'
 
 const Container = styled(Box)`
   border: 1px solid gray;
   border-radius: 10px;
-  margin: 10px;
-  height: 350px;
+  margin: 20px;
+  height: 300px;
   align-items: center;
   flex-direction: column;
   & > p {
@@ -23,6 +24,7 @@ const Text = styled(Typography)`
   color: #878787;
   font-size: 12px;
 `;
+
 
 const Heading = styled(Typography)`
   font-size: 18px;
@@ -42,7 +44,7 @@ function Post({ post }) {
     : "https://images.hdqwalls.com/wallpapers/ford-mustang-gt-forest-lord-5k-oq.jpg";
   return (
     <Container>
-      <Image src={url} alt="blog" />
+      <Image src={url} alt="blog" className="hover-rotate"/>
       <Text>{post.categories}</Text>
       <Heading>{addEllipsis(post.title, 20)}</Heading>
       <Text>{post.username}</Text>
